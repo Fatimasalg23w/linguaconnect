@@ -1,0 +1,156 @@
+.cita-container {
+  min-height: 100vh;
+  background: var(--bg-alt);
+  padding: 2rem 5%;
+  padding-top: 6rem;
+}
+
+.cita-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cita-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.cita-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.cita-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.info-card, .alumno-info {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  border: 2px solid var(--lavender);
+}
+
+.info-card h3, .alumno-info h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.info-card ol {
+  padding-left: 1.5rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.cita-form {
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  border: 2px solid var(--lavender);
+}
+
+.date-select {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid var(--lavender);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.time-slot {
+  padding: 1.2rem;
+  border: 2px solid var(--lavender);
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.time-slot:hover:not(:disabled) {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+}
+
+.time-slot.selected {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.time-slot:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cita-resumen {
+  background: var(--lavender);
+  padding: 2rem;
+  border-radius: 15px;
+  margin: 2rem 0;
+}
+
+.cita-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-confirmar, .btn-cancelar {
+  flex: 1;
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-confirmar {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-confirmar:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-confirmar:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.btn-cancelar {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--lavender);
+}
+
+@media (max-width: 768px) {
+  .cita-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-slots {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
