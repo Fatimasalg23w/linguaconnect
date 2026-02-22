@@ -15,9 +15,6 @@ function Pago() {
     telefono: '',
     horario: '',
     nivelEstimado: '',
-    numeroTarjeta: '',
-    cvv: '',
-    fechaExpiracion: '',
     cupon: ''
   });
 
@@ -28,7 +25,7 @@ function Pago() {
     mensaje: ''
   });
 
-  const [precioFinal, setPrecioFinal] = useState(precio || 1725);
+  const [precioFinal, setPrecioFinal] = useState(precio || 2900);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -40,7 +37,6 @@ function Pago() {
 
   const calcularPrecioFinal = () => {
     if (!cuponInfo.aplicado) return precio;
-    
     if (cuponInfo.tipo === 'porcentaje') {
       return precio - (precio * (cuponInfo.descuento / 100));
     } else {
@@ -54,34 +50,21 @@ function Pago() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const verificarCupon = async () => {
     if (!formData.cupon.trim()) return;
-
     setLoading(true);
     setError('');
-
     try {
       const planType = plan.toLowerCase().includes('premium') ? 'premium' : 'estandar';
-      
       const response = await fetch(`${API_URL}/cupones/verificar`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          codigo: formData.cupon,
-          plan: planType
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codigo: formData.cupon, plan: planType })
       });
-
       const data = await response.json();
-
       if (data.valido) {
         setCuponInfo({
           aplicado: true,
@@ -91,74 +74,88 @@ function Pago() {
         });
       } else {
         setError(data.mensaje);
-        setCuponInfo({
-          aplicado: false,
-          descuento: 0,
-          tipo: 'porcentaje',
-          mensaje: ''
-        });
+        setCuponInfo({ aplicado: false, descuento: 0, tipo: 'porcentaje', mensaje: '' });
       }
     } catch (err) {
-      console.error('Error al verificar cupón:', err);
       setError('Error al verificar el cupón. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
   };
 
+  const eliminarCupon = () => {
+    setCuponInfo({ aplicado: false, descuento: 0, tipo: 'porcentaje', mensaje: '' });
+    setFormData(prev => ({ ...prev, cupon: '' }));
+  };
+
+  // Validar campos antes de ir a Conekta
+  const validarFormulario = () => {
+    if (!formData.nombre.trim()) return 'El nombre es requerido';
+    if (!formData.correo.trim() || !formData.correo.includes('@')) return 'Correo electrónico inválido';
+    if (!formData.telefono.trim() || formData.telefono.length < 10) return 'Teléfono inválido (mínimo 10 dígitos)';
+    if (!formData.horario) return 'Selecciona un horario';
+    if (!formData.nivelEstimado) return 'Selecciona tu nivel de inglés';
+    return null;
+  };
+
   const procesarPago = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
+    const errorValidacion = validarFormulario();
+    if (errorValidacion) {
+      setError(errorValidacion);
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      // Validar datos de tarjeta (básico)
-      if (formData.numeroTarjeta.length < 16) {
-        throw new Error('Número de tarjeta inválido');
-      }
+      // Guardamos los datos del alumno en sessionStorage para recuperarlos
+      // después de que Conekta regrese con el pago exitoso
+      sessionStorage.setItem('linguaconnect_alumno', JSON.stringify({
+        nombre: formData.nombre,
+        correo: formData.correo,
+        telefono: formData.telefono,
+        horario: formData.horario,
+        nivelEstimado: formData.nivelEstimado,
+        plan: plan,
+        montoPagado: precioFinal,
+        cuponCodigo: cuponInfo.aplicado ? formData.cupon : null,
+        descuentoAplicado: cuponInfo.aplicado ? cuponInfo.descuento : 0
+      }));
 
-      if (formData.cvv.length < 3) {
-        throw new Error('CVV inválido');
-      }
-
-      // Simular proceso de pago
-      // En producción, aquí integrarías Stripe, PayPal, etc.
-      const pagoId = `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-      // Redirigir a página de selección de cita
-      navigate('/seleccionar-cita', {
-        state: {
-          alumnoData: {
-            nombre: formData.nombre,
-            correo: formData.correo,
-            telefono: formData.telefono,
-            horario: formData.horario,
-            nivelEstimado: formData.nivelEstimado,
-            plan: plan,
-            pagoId: pagoId,
-            montoPagado: precioFinal,
-            cuponCodigo: cuponInfo.aplicado ? formData.cupon : null,
-            descuentoAplicado: cuponInfo.aplicado ? cuponInfo.descuento : 0
-          }
-        }
+      // Llamar al backend para crear la orden en Conekta
+      const response = await fetch(`${API_URL}/payment/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: formData.nombre,
+          correo: formData.correo,
+          telefono: formData.telefono,
+          plan: plan,
+          montoPagado: precioFinal,
+          cuponCodigo: cuponInfo.aplicado ? formData.cupon : null,
+          nivelEstimado: formData.nivelEstimado,
+          horario: formData.horario
+        })
       });
 
+      const data = await response.json();
+
+      if (data.success && data.checkout_url) {
+        // Redirigir al checkout seguro de Conekta
+        // El usuario pagará ahí y Conekta lo regresará a /seleccionar-cita
+        window.location.href = data.checkout_url;
+      } else {
+        setError(data.mensaje || 'Error al crear la orden de pago');
+      }
     } catch (err) {
-      console.error('Error en pago:', err);
-      setError(err.message || 'Error al procesar el pago');
+      console.error('Error al procesar pago:', err);
+      setError('Error de conexión con el servidor. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const eliminarCupon = () => {
-    setCuponInfo({
-      aplicado: false,
-      descuento: 0,
-      tipo: 'porcentaje',
-      mensaje: ''
-    });
-    setFormData(prev => ({ ...prev, cupon: '' }));
   };
 
   return (
@@ -175,25 +172,27 @@ function Pago() {
             <h2>Resumen de Compra</h2>
             <div className="resumen-item">
               <span>Plan {plan}</span>
-              <span>${precio.toLocaleString('es-MX')} MXN</span>
+              <span>${precio?.toLocaleString('es-MX')} MXN</span>
             </div>
-            
+
             {cuponInfo.aplicado && (
               <div className="resumen-item descuento">
                 <span>Descuento ({formData.cupon})</span>
                 <span className="descuento-monto">
-                  -{cuponInfo.tipo === 'porcentaje' 
-                    ? `${cuponInfo.descuento}%` 
+                  -{cuponInfo.tipo === 'porcentaje'
+                    ? `${cuponInfo.descuento}%`
                     : `$${cuponInfo.descuento}`}
                 </span>
               </div>
             )}
 
             <div className="resumen-divider"></div>
-            
+
             <div className="resumen-total">
               <span>Total a Pagar</span>
-              <span className="total-monto">${precioFinal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</span>
+              <span className="total-monto">
+                ${precioFinal?.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN
+              </span>
             </div>
 
             <div className="resumen-beneficios">
@@ -203,7 +202,7 @@ function Pago() {
                 <li>Material didáctico completo</li>
                 <li>Clases en vivo</li>
                 <li>Certificación al terminar</li>
-                {plan.toLowerCase().includes('premium') && (
+                {plan?.toLowerCase().includes('premium') && (
                   <>
                     <li>Garantía de empleo</li>
                     <li>Asesoría laboral</li>
@@ -211,19 +210,27 @@ function Pago() {
                 )}
               </ul>
             </div>
+
+            {/* Métodos de pago aceptados */}
+            <div className="metodos-pago-info">
+              <h3>Métodos de pago aceptados:</h3>
+              <p>💳 Tarjeta de crédito / débito</p>
+              <p>🏪 Pago en OXXO</p>
+              <p>🏦 Transferencia bancaria</p>
+              <p className="conekta-nota">🔒 Pagos procesados de forma segura por Conekta</p>
+            </div>
           </div>
 
-          {/* Formulario de pago */}
+          {/* Formulario */}
           <div className="pago-form-container">
             <form className="pago-form" onSubmit={procesarPago}>
               {error && (
-                <div className="error-message">
-                  {error}
-                </div>
+                <div className="error-message">{error}</div>
               )}
 
               <div className="form-section">
                 <h3>📋 Información Personal</h3>
+
                 <div className="form-group">
                   <label>Nombre Completo *</label>
                   <input
@@ -256,7 +263,7 @@ function Pago() {
                     value={formData.telefono}
                     onChange={handleInputChange}
                     required
-                    placeholder="+52 55 1234 5678"
+                    placeholder="5512345678"
                   />
                 </div>
 
@@ -269,9 +276,9 @@ function Pago() {
                     required
                   >
                     <option value="">Selecciona un horario</option>
-                    <option value="lunes-viernes-noche">Lunes a Viernes - 8:00 PM a 9:00 PM</option>
-                    <option value="sabado-matutino">Sábados - 9:00 AM a 2:00 PM</option>
-                    <option value="sabado-vespertino">Sábados - 4:00 PM a 8:00 PM</option>
+                    <option value="lunes-viernes-noche">Lunes a Viernes — 8:00 PM a 9:00 PM</option>
+                    <option value="sabado-matutino">Sábados — 9:00 AM a 2:00 PM</option>
+                    <option value="sabado-vespertino">Sábados — 4:00 PM a 8:00 PM</option>
                   </select>
                 </div>
 
@@ -284,12 +291,12 @@ function Pago() {
                     required
                   >
                     <option value="">Selecciona tu nivel</option>
-                    <option value="A1">A1 - Principiante</option>
-                    <option value="A2">A2 - Elemental</option>
-                    <option value="B1">B1 - Intermedio</option>
-                    <option value="B2">B2 - Intermedio Alto</option>
-                    <option value="C1">C1 - Avanzado</option>
-                    <option value="C2">C2 - Maestría</option>
+                    <option value="A1">A1 — Principiante</option>
+                    <option value="A2">A2 — Elemental</option>
+                    <option value="B1">B1 — Intermedio</option>
+                    <option value="B2">B2 — Intermedio Alto</option>
+                    <option value="C1">C1 — Avanzado</option>
+                    <option value="C2">C2 — Maestría</option>
                   </select>
                 </div>
               </div>
@@ -306,85 +313,36 @@ function Pago() {
                     disabled={cuponInfo.aplicado}
                   />
                   {!cuponInfo.aplicado ? (
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={verificarCupon}
                       disabled={loading || !formData.cupon.trim()}
                       className="btn-verificar"
                     >
-                      {loading ? 'Verificando...' : 'Aplicar'}
+                      {loading ? '...' : 'Aplicar'}
                     </button>
                   ) : (
-                    <button 
-                      type="button" 
-                      onClick={eliminarCupon}
-                      className="btn-eliminar"
-                    >
-                      ✕
-                    </button>
+                    <button type="button" onClick={eliminarCupon} className="btn-eliminar">✕</button>
                   )}
                 </div>
                 {cuponInfo.mensaje && (
-                  <div className="cupon-mensaje success">
-                    {cuponInfo.mensaje}
-                  </div>
+                  <div className="cupon-mensaje success">{cuponInfo.mensaje}</div>
                 )}
               </div>
 
-              <div className="form-section">
-                <h3>💳 Información de Pago</h3>
-                <div className="form-group">
-                  <label>Número de Tarjeta *</label>
-                  <input
-                    type="text"
-                    name="numeroTarjeta"
-                    value={formData.numeroTarjeta}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="1234 5678 9012 3456"
-                    maxLength="16"
-                  />
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Fecha de Expiración *</label>
-                    <input
-                      type="text"
-                      name="fechaExpiracion"
-                      value={formData.fechaExpiracion}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="MM/AA"
-                      maxLength="5"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>CVV *</label>
-                    <input
-                      type="text"
-                      name="cvv"
-                      value={formData.cvv}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="123"
-                      maxLength="4"
-                    />
-                  </div>
-                </div>
-
-                <div className="info-box">
-                  🔒 Tu información de pago está protegida con encriptación de nivel bancario.
-                </div>
+              <div className="info-box">
+                🔒 Al hacer clic en "Continuar al pago" serás redirigido a la página segura de Conekta 
+                donde podrás pagar con tarjeta, OXXO o transferencia bancaria.
               </div>
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="btn-pagar"
                 disabled={loading}
               >
-                {loading ? 'Procesando...' : `Pagar $${precioFinal.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`}
+                {loading
+                  ? 'Procesando...'
+                  : `Continuar al pago — $${precioFinal?.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`}
               </button>
             </form>
           </div>
