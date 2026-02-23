@@ -168,7 +168,7 @@ function SeleccionarCita() {
             <div className="cita-resumen">
               <h3>✓ Resumen de tu Cita</h3>
               <p><strong>Fecha:</strong> {availableDates.find(d => d.value === selectedDate)?.label}</p>
-              <p><strong>Hora:</strong> {selectedTime} (Hora de México)</p>
+              <p><strong>Hora:</strong> {selectedTime} (Ciudad de México)</p>
               <p>ℹ️ Duración aproximada: 60 minutos</p>
             </div>
           )}
