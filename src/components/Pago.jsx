@@ -332,7 +332,7 @@ function Pago() {
 
               <div className="info-box">
                 🔒 Al hacer clic en "Continuar al pago" serás redirigido a la página segura de Conekta 
-                donde podrás pagar con tarjeta, OXXO o transferencia bancaria.
+                donde podrás pagar con tarjeta, 7eleven, Farmacias del Ahorro, Extra y más tiendas participantes o transferencia bancaria.
               </div>
 
               <button
