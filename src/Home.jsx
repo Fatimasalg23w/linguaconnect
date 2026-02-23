@@ -500,7 +500,7 @@ function Home() {
       <section className="section section-alt" id="pricing">
         <h2 className="section-title">Planes de Estudio</h2>
         <p className="section-subtitle">Elige el plan que mejor se adapte a tus objetivos profesionales. Curso 100% virtual en línea.</p>
-        <div style={{maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '3rem'}}>
+        <div style={{maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem'}}>
           
           {/* Plan Estándar */}
           <div style={{background: 'white', padding: '3.5rem', borderRadius: '20px', position: 'relative', transition: 'all 0.4s ease', border: '3px solid var(--lavender)'}}>
