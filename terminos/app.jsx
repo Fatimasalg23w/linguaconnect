@@ -9,7 +9,7 @@ function Terminos() {
       <div className="legal-header">
         <button className="btn-back" onClick={() => navigate('/')}>← Volver al inicio</button>
         <h1>Términos y Condiciones</h1>
-        <p className="legal-date">Última actualización: Febrero 2026</p>
+        <p className="legal-date">Última actualización: Febrero 2025</p>
       </div>
 
       <div className="legal-content">
