@@ -10,6 +10,9 @@ function SeleccionarCita() {
   const { alumnoData: stateData } = location.state || {};
   const alumnoData = stateData || JSON.parse(sessionStorage.getItem('linguaconnect_alumno') || 'null');
 
+  const searchParams = new URLSearchParams(location.search);
+  const paymentStatus = searchParams.get('payment_status');
+
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
@@ -17,15 +20,17 @@ function SeleccionarCita() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (paymentStatus === 'pending_payment') {
+      navigate('/pendiente-efectivo');
+      return;
+    }
     if (!alumnoData) {
       navigate('/');
     }
   }, []);
 
   useEffect(() => {
-    if (selectedDate) {
-      fetchAvailableSlots(selectedDate);
-    }
+    if (selectedDate) fetchAvailableSlots(selectedDate);
   }, [selectedDate]);
 
   const fetchAvailableSlots = async (fecha) => {
@@ -101,7 +106,6 @@ function SeleccionarCita() {
           <h1>¡Pago Exitoso! 🎉</h1>
           <p>Ahora programa tu examen de nivelación</p>
         </div>
-
         <div className="cita-info">
           <div className="info-card">
             <h3>📋 Información del Proceso</h3>
@@ -120,9 +124,7 @@ function SeleccionarCita() {
             <p><strong>Nivel Estimado:</strong> {alumnoData?.nivelEstimado}</p>
           </div>
         </div>
-
         {error && <div className="error-message">{error}</div>}
-
         <div className="cita-form">
           <div className="form-section">
             <h3>📅 Selecciona una Fecha</h3>
@@ -137,7 +139,6 @@ function SeleccionarCita() {
               ))}
             </select>
           </div>
-
           {selectedDate && (
             <div className="form-section">
               <h3>🕐 Selecciona un Horario</h3>
@@ -163,7 +164,6 @@ function SeleccionarCita() {
               )}
             </div>
           )}
-
           {selectedDate && selectedTime && (
             <div className="cita-resumen">
               <h3>✓ Resumen de tu Cita</h3>
@@ -172,7 +172,6 @@ function SeleccionarCita() {
               <p>ℹ️ Duración aproximada: 60 minutos</p>
             </div>
           )}
-
           <div className="cita-actions">
             <button
               className="btn-confirmar"
