@@ -1982,3 +1982,18 @@ footer p {
     font-size: 1rem;
   }
 }
+
+@media (max-width: 768px) {
+  .nav-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .logo-text {
+    font-size: 0.95rem;
+  }
+
+  .logo {
+    gap: 0.5rem;
+  }
+}
