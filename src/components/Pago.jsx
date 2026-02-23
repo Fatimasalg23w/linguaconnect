@@ -217,7 +217,7 @@ function Pago() {
               <p>💳 Tarjeta de crédito / débito</p>
               <p>🏪 Pago en 7eleven,Farmacias del ahorro,Extra,Farmacias Benavides y más.</p>
               <p>🏦 Transferencia bancaria</p>
-              <p className="conekta-nota">🔒 Pagos procesados de forma segura por Conekta</p>
+              <p className="conekta-nota">🔒 Pagos procesados de forma segura</p>
             </div>
           </div>
 
