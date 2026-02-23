@@ -608,7 +608,7 @@ function Home() {
           <div className="footer-section">
             <h3>Contacto</h3>
             <a href="mailto:info@linguaconnect.com">📧 info@linguaconnectacademy.com</a>
-            <a href="https://wa.me/525512345678" target="_blank" rel="noreferrer">💬 WhatsApp</a>
+            <a href="https://wa.me/525616726659" target="_blank" rel="noreferrer">💬 WhatsApp</a>
             <p style={{marginTop: '1rem'}}>📍 Ciudad de México, México</p>
           </div>
 
