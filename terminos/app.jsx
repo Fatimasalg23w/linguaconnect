@@ -259,7 +259,7 @@ function Terminos() {
           </p>
           <ul>
             <li>📧 Email: info@linguaconnectacademy.com</li>
-            <li>💬 WhatsApp: +52 5616726659</li>
+            <li>💬 WhatsApp: +52 5616726659 </li>
             <li>📍 Ubicación: Ciudad de México, México</li>
           </ul>
         </section>
