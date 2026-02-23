@@ -259,7 +259,7 @@ function Privacidad() {
           </p>
           <ul>
             <li>📧 Email: privacidad@linguaconnectacademy.com</li>
-            <li>💬 WhatsApp: +52 55 1234 5678</li>
+            <li>💬 WhatsApp: +52 5616726659</li>
             <li>📍 Ubicación: Ciudad de México, México</li>
           </ul>
           <p>
