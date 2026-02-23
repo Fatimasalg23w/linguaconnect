@@ -550,7 +550,7 @@ function Home() {
               MÁS POPULAR
             </div>
             <h3 style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '2.5rem', color: 'var(--primary)', marginBottom: '1rem', letterSpacing: '1px', fontWeight: 600}}>Plan Premium</h3>
-            <div style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '4rem', color: 'var(--primary)', marginBottom: '0.5rem', fontWeight: 700}}> $3,520<span style={{fontSize: '1.5rem', color: 'var(--text-light)'}}>MXN/mes</span>
+            <div style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '3rem', color: 'var(--primary)', marginBottom: '0.5rem', fontWeight: 700, flexWrap: 'wrap', display: 'flex', alignItems: 'baseline', gap: '0.3rem'}}>$3,520<span style={{fontSize: '1.5rem', color: 'var(--text-light)'}}>MXN/mes</span>
             </div>
             <p style={{fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 600, marginBottom: '2rem'}}>🌐 Curso 100% Virtual en Línea</p>
             <ul style={{listStyle: 'none', margin: '2rem 0'}}>
