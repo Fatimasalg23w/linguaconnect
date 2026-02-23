@@ -98,8 +98,8 @@ function Pago() {
   if (oxxoData) {
     return (
       <div className="oxxo-confirmation">
-        <h2>¡Pago OXXO Generado!</h2>
-        <p>Presenta esta referencia en cualquier tienda OXXO:</p>
+        <h2>¡Pago en tiendas Generado!</h2>
+        <p>Presenta esta referencia en cualquier tienda 7eleven,Farmacias Benavides, Extra y demás tiendas participantes:</p>
         <div className="oxxo-reference">
           <h3>{oxxoData.oxxoReference}</h3>
         </div>
@@ -142,7 +142,7 @@ function Pago() {
               checked={formData.metodoPago === 'oxxo'}
               onChange={(e) => setFormData({...formData, metodoPago: e.target.value})}
             />
-            Pago en OXXO
+            Pago en 7eleven,Farmacias Benavides, Extra y demás tiendas participantes
           </label>
         </div>
 

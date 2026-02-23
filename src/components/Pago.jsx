@@ -111,9 +111,9 @@ function Pago() {
     setLoading(true);
 
     try {
-      // Guardamos los datos del alumno en sessionStorage para recuperarlos
+      // Guardamos los datos del alumno en localStorage para recuperarlos
       // después de que Conekta regrese con el pago exitoso
-      sessionStorage.setItem('linguaconnect_alumno', JSON.stringify({
+      localStorage.setItem('linguaconnect_alumno', JSON.stringify({
         nombre: formData.nombre,
         correo: formData.correo,
         telefono: formData.telefono,
@@ -215,7 +215,7 @@ function Pago() {
             <div className="metodos-pago-info">
               <h3>Métodos de pago aceptados:</h3>
               <p>💳 Tarjeta de crédito / débito</p>
-              <p>🏪 Pago en OXXO</p>
+              <p>🏪 Pago en 7eleven,Farmacias del ahorro,Extra,Farmacias Benavides y más.</p>
               <p>🏦 Transferencia bancaria</p>
               <p className="conekta-nota">🔒 Pagos procesados de forma segura por Conekta</p>
             </div>

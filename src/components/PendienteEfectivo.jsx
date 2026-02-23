@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 function PendienteEfectivo() {
   const navigate = useNavigate();
-  const alumnoData = JSON.parse(sessionStorage.getItem('linguaconnect_alumno') || 'null');
+  const alumnoData = JSON.parse(localStorage.getItem('linguaconnect_alumno') || 'null');
 
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
@@ -51,7 +51,7 @@ function PendienteEfectivo() {
       });
       const data = await response.json();
       if (data.success) {
-        sessionStorage.removeItem('linguaconnect_alumno');
+        localStorage.removeItem('linguaconnect_alumno');
         setCitaConfirmada(true);
       } else {
         setError(data.mensaje || 'Error al confirmar');
@@ -92,7 +92,7 @@ function PendienteEfectivo() {
           <div className="info-card" style={{margin: '2rem 0', padding: '2rem'}}>
             <h3>📋 Próximos Pasos</h3>
             <ol>
-              <li>Completa tu pago en OXXO o por transferencia bancaria</li>
+              <li>Completa tu pago en 7eleven,Farmacias Benavides, Extra y demás tiendas participantes o por transferencia bancaria</li>
               <li>Envía tu comprobante a <strong>academylinguaconnect@gmail.com</strong></li>
               <li>Confirmaremos tu inscripción en menos de 24 horas</li>
               <li>Tu cita de examen quedará confirmada una vez verificado el pago</li>

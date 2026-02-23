@@ -8,7 +8,7 @@ function SeleccionarCita() {
   const navigate = useNavigate();
   const location = useLocation();
   const { alumnoData: stateData } = location.state || {};
-  const alumnoData = stateData || JSON.parse(sessionStorage.getItem('linguaconnect_alumno') || 'null');
+  const alumnoData = stateData || JSON.parse(localStorage.getItem('linguaconnect_alumno') || 'null');
 
   const searchParams = new URLSearchParams(location.search);
   const paymentStatus = searchParams.get('payment_status');
@@ -67,7 +67,7 @@ function SeleccionarCita() {
       });
       const data = await response.json();
       if (data.success) {
-        sessionStorage.removeItem('linguaconnect_alumno');
+        localStorage.removeItem('linguaconnect_alumno');
         navigate('/confirmacion', { state: { alumno: data.alumno, cita: data.cita } });
       } else {
         setError(data.mensaje || 'Error al confirmar la inscripción');
