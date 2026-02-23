@@ -25,7 +25,7 @@ function Pago() {
     mensaje: ''
   });
 
-  const [precioFinal, setPrecioFinal] = useState(precio || 2900);
+  const [precioFinal, setPrecioFinal] = useState(precio || 2435);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 

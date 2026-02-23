@@ -506,7 +506,7 @@ function Home() {
           <div style={{background: 'white', padding: '3.5rem', borderRadius: '20px', position: 'relative', transition: 'all 0.4s ease', border: '3px solid var(--lavender)'}}>
             <h3 style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '2.5rem', color: 'var(--primary)', marginBottom: '1rem', letterSpacing: '1px', fontWeight: 600}}>Plan Estándar</h3>
             <div style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '4rem', color: 'var(--primary)', marginBottom: '0.5rem', fontWeight: 700}}>
-              $2,900 <span style={{fontSize: '1.5rem', color: 'var(--text-light)'}}>MXN/mes</span>
+              $2,435 <span style={{fontSize: '1.5rem', color: 'var(--text-light)'}}>MXN/mes</span>
             </div>
             <p style={{fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 600, marginBottom: '2rem'}}>🌐 Curso 100% Virtual en Línea</p>
             <ul style={{listStyle: 'none', margin: '2rem 0'}}>
@@ -538,7 +538,7 @@ function Home() {
             <button 
               className="btn-primary" 
               style={{width: '100%', padding: '1.3rem', fontSize: '1.2rem'}}
-              onClick={() => handlePlanSelection('Estándar', 2900)}
+              onClick={() => handlePlanSelection('Estándar', 2435)}
             >
               Inscribirme Ahora
             </button>
@@ -550,7 +550,7 @@ function Home() {
               MÁS POPULAR
             </div>
             <h3 style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '2.5rem', color: 'var(--primary)', marginBottom: '1rem', letterSpacing: '1px', fontWeight: 600}}>Plan Premium</h3>
-            <div style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '3rem', color: 'var(--primary)', marginBottom: '0.5rem', fontWeight: 700, flexWrap: 'wrap', display: 'flex', alignItems: 'baseline', gap: '0.3rem'}}>$3,520<span style={{fontSize: '1.5rem', color: 'var(--text-light)'}}>MXN/mes</span>
+            <div style={{fontFamily: 'Space Grotesk, sans-serif', fontSize: '3rem', color: 'var(--primary)', marginBottom: '0.5rem', fontWeight: 700, flexWrap: 'wrap', display: 'flex', alignItems: 'baseline', gap: '0.3rem'}}>$3,120<span style={{fontSize: '1.5rem', color: 'var(--text-light)'}}>MXN/mes</span>
             </div>
             <p style={{fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 600, marginBottom: '2rem'}}>🌐 Curso 100% Virtual en Línea</p>
             <ul style={{listStyle: 'none', margin: '2rem 0'}}>
@@ -586,7 +586,7 @@ function Home() {
             <button 
               className="btn-primary" 
               style={{width: '100%', padding: '1.3rem', fontSize: '1.2rem'}}
-              onClick={() => handlePlanSelection('Premium', 3520)}
+              onClick={() => handlePlanSelection('Premium', 3120)}
             >
               Inscribirme Ahora
             </button>
