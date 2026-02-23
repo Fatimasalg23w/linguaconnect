@@ -321,3 +321,22 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 640px) {
+  .cupon-input-group {
+    flex-direction: column;
+  }
+
+  .cupon-input-group input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .btn-verificar,
+  .btn-eliminar {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
